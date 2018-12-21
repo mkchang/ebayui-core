@@ -35,10 +35,19 @@ async.forEachSeries([3, 4], (markoVersion, callback) => {
         demoUtils.getComponentsWithExamples('dist').forEach((componentName) => {
             describe(componentName, () => {
                 const examplesPath = `${__dirname}/../dist/components/${componentName}/examples`;
+
                 fs.readdirSync(examplesPath).map(example => ({
                     example,
                     markup: fs.readFileSync(`${examplesPath}/${example}/template.marko`, 'utf8')
                 })).forEach((exampleData) => {
+                    if (exampleData && componentName === 'ebay-tooltip') {
+                        console.log('**** exampleData.markup ***********************************************');
+                        console.log(exampleData.markup);
+                        console.log('***************************************************');
+
+                        return;
+                    }
+
                     let browserJson = fs.readFileSync(`${__dirname}/base.json`, 'utf8');
                     browserJson = browserJson.replace('#INJECT#', `../${componentName}`);
                     fs.writeFileSync(`${__dirname}/browser.json`, browserJson);
